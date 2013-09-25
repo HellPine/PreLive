@@ -2269,7 +2269,26 @@ public class tests {
 			
 		}
 		
-		while(!driver.getCurrentUrl().contains("#")){
+		int count=0;
+		String paystring ="";
+		if(language.equals("english")){
+			
+			paystring="payment";
+		}
+		
+		if(language.equals("norwegian")){
+			
+			paystring="betalingsmåte";
+		}
+		
+		if(language.equals("swedish")){
+			
+			paystring="BETALNINGSMETODER";
+		}
+		
+		paystring=paystring.toLowerCase();
+		
+		do{
 		try{
 			
 			driver.findElement(By.cssSelector(phonecss)).clear();
@@ -2370,7 +2389,11 @@ public class tests {
 			result=result+"<p> Next Button Failed</p>";
 		}
 		
-		}//while page not contains # (That means that L2 Step1 is finished)
+		Thread.sleep(1000);
+		count++;
+		if(count==4){break;}
+		
+		}while(!driver.getPageSource().toLowerCase().contains(paystring));//while page not contains # (That means that L2 Step1 is finished)
 		//if(overall.equals("FAILED")){result2=result2+"<td>FAILED</td></tr>";
 		//overall="FAILED";}
 		
