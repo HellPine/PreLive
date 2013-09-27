@@ -278,6 +278,7 @@ public class tests {
 			
 		}else{
 			
+			browser="firefox";
 			driver = new FirefoxDriver();
 		}
 		
@@ -300,14 +301,22 @@ public class tests {
 	    	
 	    }
 	    
-	    String source=driver.getPageSource();
-	    System.out.println("Acquiring Site Language");
-	    System.out.println("-----------------------------------");
+	    language="null";
+	    while(language.equals("null")){
+	    	
+	    	String source=driver.getPageSource();
+	    	System.out.println("Acquiring Site Language");
+	    	System.out.println("-----------------------------------");
 	    
-	    if (source.contains("ontact")||source.contains("esponsible")){ language="english";}
-	    if (source.contains("ontakt")){ language="norwegian";}
-	    if (source.contains("ö")){ language="swedish";}
+	    	if (source.contains("ontact")||source.contains("esponsible")){ language="english";}
+	    	if (source.contains("ontakt")){ language="norwegian";}
+	    	if (source.contains("ö")){ language="swedish";}
 	    
+	    	if(language.equals(null)){
+	    		driver.navigate().refresh();
+	    	}
+	    
+	    }
 	    
 	    System.out.println("Site Language=="+language);
 	    System.out.println("-----------------------------------");
@@ -2782,15 +2791,28 @@ public class tests {
 		
 			//if(batchid.contains("labels")){
 			
+				int p=0;
+				try{
+				while(driver.findElement(By.cssSelector("[qa='dbutton']")).isDisplayed()){
 				try{
 				
 				driver.findElement(By.cssSelector("[qa='paymentback']")).click();
+				System.out.println("looking for correct change card url");
 				
-				
-				
-			}catch(Exception e23){
-				
-			}
+				p++;
+				System.out.println(p);
+				if(p>=6){
+					
+					driver.navigate().back();
+					break;
+				}
+				}catch(Exception e23){
+					System.out.println("Still not");
+					System.out.println(driver.getCurrentUrl());
+				}}
+				}catch(Exception e){
+					System.out.println("ok");
+				}
 			
 			/*}else
 				
@@ -3419,10 +3441,12 @@ public class tests {
 	    				}
 	    				String screenname=genlogin.replace("mrt", "");
 	    			
-	    				driver.findElement(By.cssSelector(screen)).clear(); 
-	    				driver.findElement(By.cssSelector(screen)).sendKeys(screenname); //Handle Screen name
-	    				driver.findElement(By.cssSelector(enterbutton)).click();
-	    				
+	    				while(driver.findElement(By.cssSelector(screen)).isDisplayed()){
+	    					driver.findElement(By.cssSelector(screen)).clear(); 
+	    					driver.findElement(By.cssSelector(screen)).sendKeys(screenname); //Handle Screen name
+	    					driver.findElement(By.cssSelector(enterbutton)).click();
+	    					Thread.sleep(3000);
+	    				}
 	    			}catch (Exception e){
 	    			
 	    				//System.out.println("No screen name required");
@@ -3430,6 +3454,7 @@ public class tests {
 	    				
 	    			
 	    			}
+	    			
 	    			
 	    			
     				//result=result+"<p> Click on the screenshot to see it larger <a href=../"+screenshot+"><img SRC=../"+screenshot+" width=100 height=100></a><p>";
