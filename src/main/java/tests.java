@@ -2565,6 +2565,7 @@ public class tests {
 				result=result+"<p>"+chktext+" Payment Method Checking<p>";
 				result=result+"<p>-----------------------------<p>";
 				
+				System.out.println(chkbutton);
 				try{
 				
 					if(!chkbutton.contains("//")){
@@ -2576,12 +2577,48 @@ public class tests {
 							if(driver.findElement(By.cssSelector(chkicon)).isDisplayed()){
 							System.out.println("looking icon");
 					
-						try{
+								try{
 						
-							driver.findElement(By.cssSelector(chkbutton)).click();
-							System.out.println("looking button");
-							Thread.sleep(1000);
-						
+									driver.findElement(By.cssSelector(chkbutton)).click();
+									System.out.println("looking button");
+									Thread.sleep(1000);
+									int j=0;
+									
+									
+									while(j<=5){
+									
+										try{
+										
+											if(!driver.findElement(By.cssSelector("[qa='dbutton']")).isDisplayed()){
+											
+												try{
+																								
+													driver.findElement(By.cssSelector(chkbutton)).click();
+											
+												}catch(Exception e21){
+												
+													System.out.println("Deposit button not reachable");
+												}
+										
+											}else{
+												break;
+											}
+									
+									
+										}catch(Exception e40){
+											System.out.println("deposit button not in ... try("+j+")");
+											driver.navigate().refresh();
+											j++;
+											Thread.sleep(1000);
+										}
+									}
+									
+							
+							System.out.println("In payment page");
+								
+
+
+							
 							String source=driver.getPageSource().toLowerCase();
 							chktext=chktext.toLowerCase();
 							if(source.contains(chktext)){
